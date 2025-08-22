@@ -1,0 +1,92 @@
+{
+  "version": "5",
+  "dialect": "postgresql",
+  "id": "0004_add_redemption_qr_codes",
+  "prevId": "0003_add_phone_to_users",
+  "tables": {
+    "reward_redemption_qr_codes": {
+      "name": "reward_redemption_qr_codes",
+      "schema": "public",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "redemption_id": {
+          "name": "redemption_id",
+          "type": "uuid",
+          "notNull": true
+        },
+        "qr_code": {
+          "name": "qr_code",
+          "type": "text",
+          "notNull": true,
+          "unique": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "notNull": true
+        },
+        "is_used": {
+          "name": "is_used",
+          "type": "boolean",
+          "notNull": true,
+          "default": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp"
+        },
+        "validated_by_store": {
+          "name": "validated_by_store",
+          "type": "boolean",
+          "notNull": true,
+          "default": false
+        },
+        "validated_at": {
+          "name": "validated_at",
+          "type": "timestamp"
+        },
+        "store_validation_metadata": {
+          "name": "store_validation_metadata",
+          "type": "json"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reward_redemption_qr_codes_redemption_id_reward_redemptions_id_fk": {
+          "name": "reward_redemption_qr_codes_redemption_id_reward_redemptions_id_fk",
+          "tableFrom": "reward_redemption_qr_codes",
+          "tableTo": "reward_redemptions",
+          "columnsFrom": ["redemption_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "reward_redemption_qr_codes_qr_code_unique": {
+          "name": "reward_redemption_qr_codes_qr_code_unique",
+          "columns": ["qr_code"]
+        }
+      }
+    }
+  },
+  "enums": {
+    "redemption_validation_status": {
+      "name": "redemption_validation_status",
+      "schema": "public",
+      "values": ["pending", "validated", "rejected", "expired"]
+    }
+  }
+}

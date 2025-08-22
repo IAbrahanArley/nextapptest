@@ -1,0 +1,236 @@
+{
+  "id": "0002_add_store_config",
+  "prevId": "0001_add_password_hash",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "stores": {
+      "name": "stores",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "hasDefault": true,
+          "default": "gen_random_uuid()"
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "logo_url": {
+          "name": "logo_url",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "banner_url": {
+          "name": "banner_url",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "cnpj": {
+          "name": "cnpj",
+          "type": "varchar(18)",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(320)",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "website": {
+          "name": "website",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "instagram": {
+          "name": "instagram",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "facebook": {
+          "name": "facebook",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "whatsapp": {
+          "name": "whatsapp",
+          "type": "text",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "'BRL'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "now()"
+        }
+      },
+      "foreignKeys": [
+        {
+          "name": "stores_owner_id_users_id_fk",
+          "tableName": "stores",
+          "columns": ["owner_id"],
+          "foreignTableName": "users",
+          "foreignColumns": ["id"]
+        }
+      ],
+      "indexes": [],
+      "uniqueConstraints": [
+        {
+          "name": "stores_slug_unique",
+          "columns": ["slug"]
+        }
+      ]
+    },
+    "store_settings": {
+      "name": "store_settings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "hasDefault": true
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "points_per_currency_unit": {
+          "name": "points_per_currency_unit",
+          "type": "numeric(10,2)",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "1"
+        },
+        "min_purchase_value_to_award": {
+          "name": "min_purchase_value_to_award",
+          "type": "numeric(10,2)",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "0"
+        },
+        "points_validity_days": {
+          "name": "points_validity_days",
+          "type": "integer",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "365"
+        },
+        "notification_whatsapp": {
+          "name": "notification_whatsapp",
+          "type": "boolean",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "false"
+        },
+        "notification_email": {
+          "name": "notification_email",
+          "type": "boolean",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "false"
+        },
+        "notification_expiration": {
+          "name": "notification_expiration",
+          "type": "boolean",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "false"
+        },
+        "extras": {
+          "name": "extras",
+          "type": "json",
+          "primaryKey": false,
+          "hasDefault": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "hasDefault": true,
+          "default": "now()"
+        }
+      },
+      "foreignKeys": [
+        {
+          "name": "store_settings_store_id_stores_id_fk",
+          "tableName": "store_settings",
+          "columns": ["store_id"],
+          "foreignTableName": "stores",
+          "foreignColumns": ["id"]
+        }
+      ],
+      "indexes": [],
+      "uniqueConstraints": []
+    }
+  },
+  "enums": {},
+  "schemas": {}
+}
+
