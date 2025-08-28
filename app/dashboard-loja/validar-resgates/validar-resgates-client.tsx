@@ -28,6 +28,12 @@ import {
 } from "lucide-react";
 import { validateVerificationCode } from "@/lib/utils/verification-code";
 import { QRScanner } from "@/components/qr-scanner";
+import {
+  Header,
+  ValidationCard,
+  RedemptionDetails,
+  ValidationForm,
+} from "./components";
 
 interface QRCodeData {
   redemption_id: string;
@@ -38,7 +44,7 @@ interface QRCodeData {
   timestamp: number;
 }
 
-interface RedemptionDetails {
+interface RedemptionDetailsData {
   redemption: {
     id: string;
     cost_points: number;
@@ -75,7 +81,7 @@ export function ValidarResgatesClient() {
   const [verificationCodeInput, setVerificationCodeInput] = useState("");
   const [scannedData, setScannedData] = useState<QRCodeData | null>(null);
   const [redemptionDetails, setRedemptionDetails] =
-    useState<RedemptionDetails | null>(null);
+    useState<RedemptionDetailsData | null>(null);
   const [showScanner, setShowScanner] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [validationNotes, setValidationNotes] = useState("");
@@ -200,14 +206,12 @@ export function ValidarResgatesClient() {
     });
   };
 
-  const handleManualInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQrCodeInput(e.target.value);
+  const handleQRCodeChange = (value: string) => {
+    setQrCodeInput(value);
   };
 
-  const handleVerificationCodeInput = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setVerificationCodeInput(e.target.value.toUpperCase());
+  const handleVerificationCodeChange = (value: string) => {
+    setVerificationCodeInput(value.toUpperCase());
   };
 
   const handlePaste = async () => {
@@ -234,229 +238,68 @@ export function ValidarResgatesClient() {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <QrCode className="h-5 w-5" />
-            Leitor de QR Code e Códigos Verificadores
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-2 mb-4">
-            <Button
-              variant={!useVerificationCode ? "default" : "outline"}
-              onClick={() => setUseVerificationCode(false)}
-              size="sm"
-            >
-              <QrCode className="h-4 w-4 mr-2" />
-              QR Code
-            </Button>
-            <Button
-              variant={useVerificationCode ? "default" : "outline"}
-              onClick={() => setUseVerificationCode(true)}
-              size="sm"
-            >
-              <Hash className="h-4 w-4 mr-2" />
-              Código Verificador
-            </Button>
-          </div>
+    <div className="min-h-screen">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 py-4 sm:py-6 lg:py-8">
+        <Header />
 
-          {!useVerificationCode ? (
-            <div className="space-y-2">
-              <Label htmlFor="qr-code">QR Code</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="qr-code"
-                  value={qrCodeInput}
-                  onChange={handleManualInput}
-                  placeholder="Cole o QR code aqui ou escaneie"
-                  className="flex-1"
+        <ValidationCard
+          useVerificationCode={useVerificationCode}
+          onMethodChange={setUseVerificationCode}
+          qrCodeInput={qrCodeInput}
+          onQRCodeChange={handleQRCodeChange}
+          onQRCodePaste={handlePaste}
+          onQRCodeScannerOpen={() => setShowScanner(true)}
+          onQRCodeSubmit={handleQRCodeSubmit}
+          verificationCodeInput={verificationCodeInput}
+          onVerificationCodeChange={handleVerificationCodeChange}
+          onVerificationCodePaste={handlePaste}
+          onVerificationCodeSubmit={handleVerificationCodeSubmit}
+          isPending={isPending}
+        />
+
+        <Dialog open={showDetails} onOpenChange={setShowDetails}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Detalhes do Resgate</DialogTitle>
+            </DialogHeader>
+
+            {redemptionDetails && (
+              <>
+                <RedemptionDetails redemption={redemptionDetails.redemption} />
+
+                <ValidationForm
+                  validatedBy={validatedBy}
+                  onValidatedByChange={setValidatedBy}
+                  validationLocation={validationLocation}
+                  onValidationLocationChange={setValidationLocation}
+                  validationNotes={validationNotes}
+                  onValidationNotesChange={setValidationNotes}
+                  onValidation={handleValidation}
+                  onCancel={() => setShowDetails(false)}
+                  isPending={isPending}
                 />
-                <Button onClick={handlePaste} variant="outline" size="sm">
-                  Colar
-                </Button>
-                <Button
-                  onClick={() => setShowScanner(true)}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Camera className="h-4 w-4" />
-                  Scanner
-                </Button>
-              </div>
-              <Button
-                onClick={handleQRCodeSubmit}
-                disabled={!qrCodeInput.trim() || isPending}
-                className="w-full"
-              >
-                {isPending ? "Validando..." : "Validar QR Code"}
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <Label htmlFor="verification-code">Código Verificador</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="verification-code"
-                  value={verificationCodeInput}
-                  onChange={handleVerificationCodeInput}
-                  placeholder="Ex: LOJA-A1B2C3D4"
-                  className="flex-1 font-mono text-center"
-                  maxLength={13}
-                />
-                <Button onClick={handlePaste} variant="outline" size="sm">
-                  Colar
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500">
-                Formato: XXXX-XXXXXXXX (4 letras + hífen + 8 caracteres)
-              </p>
-              <Button
-                onClick={handleVerificationCodeSubmit}
-                disabled={!verificationCodeInput.trim() || isPending}
-                className="w-full"
-              >
-                {isPending ? "Validando..." : "Validar Código"}
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Detalhes do Resgate</DialogTitle>
-          </DialogHeader>
-
-          {redemptionDetails && (
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Gift className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium">
-                    {redemptionDetails.redemption.reward.title}
-                  </span>
-                </div>
-
-                <p className="text-sm text-gray-600">
-                  {redemptionDetails.redemption.reward.description}
-                </p>
-
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <span>{redemptionDetails.redemption.user.name}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                    <span>
-                      Resgatado em{" "}
-                      {new Date(
-                        redemptionDetails.redemption.redeemed_at
-                      ).toLocaleDateString("pt-BR")}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-gray-500" />
-                    <span>{redemptionDetails.redemption.store.name}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Badge variant="outline">
-                    {redemptionDetails.redemption.cost_points} pontos
-                  </Badge>
-                  <Badge
-                    className={
-                      redemptionDetails.redemption.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
-                    }
-                  >
-                    {redemptionDetails.redemption.status === "pending"
-                      ? "Pendente"
-                      : "Validado"}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-4 border-t">
-                <div className="space-y-2">
-                  <Label htmlFor="validated-by">Nome do Validador *</Label>
-                  <Input
-                    id="validated-by"
-                    value={validatedBy}
-                    onChange={(e) => setValidatedBy(e.target.value)}
-                    placeholder="Seu nome"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="validation-location">
-                    Local da Validação
-                  </Label>
-                  <Input
-                    id="validation-location"
-                    value={validationLocation}
-                    onChange={(e) => setValidationLocation(e.target.value)}
-                    placeholder="Ex: Caixa 1, Balcão"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="validation-notes">Observações</Label>
-                  <Input
-                    id="validation-notes"
-                    value={validationNotes}
-                    onChange={(e) => setValidationNotes(e.target.value)}
-                    placeholder="Observações adicionais"
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-2 pt-4">
-                <Button
-                  onClick={handleValidation}
-                  disabled={!validatedBy.trim() || isPending}
-                  className="flex-1"
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Confirmar Validação
-                </Button>
-                <Button
-                  onClick={() => setShowDetails(false)}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Cancelar
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showScanner} onOpenChange={setShowScanner}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Scanner de QR Code</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            {actualStoreId && (
-              <QRScanner
-                onScan={handleScannerResult}
-                onClose={() => setShowScanner(false)}
-                storeId={actualStoreId as string}
-              />
+              </>
             )}
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={showScanner} onOpenChange={setShowScanner}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Scanner de QR Code</DialogTitle>
+            </DialogHeader>
+            <div className="py-4">
+              {actualStoreId && (
+                <QRScanner
+                  onScan={handleScannerResult}
+                  onClose={() => setShowScanner(false)}
+                  storeId={actualStoreId as string}
+                />
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }

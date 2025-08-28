@@ -204,7 +204,6 @@ export async function POST(request: NextRequest) {
       throw insertError;
     }
 
-    // Retornar sucesso - nota enviada para validação
     const response = {
       success: true,
       message:

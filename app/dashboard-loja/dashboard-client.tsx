@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   Card,
@@ -33,7 +33,7 @@ export function DashboardClient() {
 
   const { data: stats, isLoading, error } = useDashboardStats(storeId || "");
 
-  useEffect(() => {
+  const handleSuccessRedirect = useCallback(() => {
     const success = searchParams.get("success");
     const sessionId = searchParams.get("session_id");
 
@@ -41,6 +41,10 @@ export function DashboardClient() {
       router.replace(`/dashboard-loja/success?session_id=${sessionId}`);
     }
   }, [searchParams, router]);
+
+  useEffect(() => {
+    handleSuccessRedirect();
+  }, [handleSuccessRedirect]);
 
   if (isLoading) {
     return <DashboardHomeSkeleton />;

@@ -15,6 +15,8 @@ export default function QueryProvider({
           queries: {
             retry: 1,
             refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
             staleTime: 5 * 60 * 1000, // 5 minutes
             gcTime: 10 * 60 * 1000, // 10 minutes (React Query v5)
           },
@@ -26,6 +28,8 @@ export default function QueryProvider({
   );
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <div suppressHydrationWarning>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </div>
   );
 }
