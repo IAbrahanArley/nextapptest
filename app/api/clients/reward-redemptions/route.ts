@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { reward_redemptions, stores, rewards } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { getRewardRedemptions } from "@/actions/rewards/get-reward-redemptions";
 
 export async function GET() {
   try {
@@ -20,43 +18,24 @@ export async function GET() {
       );
     }
 
-    // Buscar resgates de prêmios do usuário
-    const userRedemptions = await db
-      .select({
-        id: reward_redemptions.id,
-        store_id: reward_redemptions.store_id,
-        reward_id: reward_redemptions.reward_id,
-        cost_points: reward_redemptions.cost_points,
-        status: reward_redemptions.status,
-        created_at: reward_redemptions.created_at,
-        metadata: reward_redemptions.metadata,
-        store_name: stores.name,
-        reward_title: rewards.title,
-      })
-      .from(reward_redemptions)
-      .innerJoin(stores, eq(reward_redemptions.store_id, stores.id))
-      .innerJoin(rewards, eq(reward_redemptions.reward_id, rewards.id))
-      .where(eq(reward_redemptions.user_id, session.user.id))
-      .orderBy(desc(reward_redemptions.created_at));
+    // Usar a nova action para buscar resgates
+    const result = await getRewardRedemptions({
+      user_id: session.user.id,
+    });
 
-    // Mapear para o formato esperado pela interface
-    const mappedRedemptions = userRedemptions.map((redemption) => ({
-      id: redemption.id,
-      store_name: redemption.store_name,
-      reward_name: redemption.reward_title,
-      cost_points: redemption.cost_points,
-      status: redemption.status,
-      created_at: redemption.created_at,
-      metadata: redemption.metadata,
-    }));
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error || "Erro ao buscar resgates" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      redemptions: mappedRedemptions,
-      totalRedemptions: mappedRedemptions.length,
-      completedRedemptions: mappedRedemptions.filter(
-        (r) => r.status === "completed"
-      ).length,
+      redemptions: result.data,
+      totalRedemptions: result.data.length,
+      completedRedemptions: result.data.filter((r) => r.status === "completed")
+        .length,
     });
   } catch (error) {
     console.error("Erro ao buscar resgates de prêmios:", error);
@@ -66,6 +45,3 @@ export async function GET() {
     );
   }
 }
-
-
-

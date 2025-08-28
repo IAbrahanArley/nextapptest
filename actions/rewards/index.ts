@@ -4,3 +4,4 @@ export { deleteReward } from "./delete-reward";
 export { getRewards } from "./get-rewards";
 export { getRewardsStats } from "./get-rewards-stats";
 export { createRedemptionQr } from "./create-redemption-qr";
+export { getRewardRedemptions } from "./get-reward-redemptions";

@@ -6,6 +6,7 @@ import { createClientSchema, type CreateClientInput } from "./schema";
 import { eq, and } from "drizzle-orm";
 import { sendWelcomeEmail, generateTemporaryPassword } from "@/lib/email";
 import * as bcrypt from "bcryptjs";
+import { migratePendingPoints } from "./migrate-pending-points";
 
 export async function createClient(data: CreateClientInput, storeId: string) {
   try {
@@ -146,6 +147,34 @@ export async function createClient(data: CreateClientInput, storeId: string) {
         points: 0,
         reserved_points: 0,
       });
+    }
+
+    // Migrar pontos pendentes automaticamente para este usuário
+    try {
+      console.log(
+        `🔧 [CLIENTE] Migrando pontos pendentes para usuário ${userId} com CPF ${validatedData.cpf}`
+      );
+
+      const migrationResult = await migratePendingPoints({
+        cpf: validatedData.cpf,
+        userId: userId,
+      });
+
+      if (migrationResult.success && migrationResult.pointsMigrated > 0) {
+        console.log(
+          `✅ [CLIENTE] ${migrationResult.pointsMigrated} pontos migrados com sucesso de ${migrationResult.storesMigrated} lojas`
+        );
+      } else {
+        console.log(
+          `ℹ️ [CLIENTE] Nenhum ponto pendente encontrado para CPF ${validatedData.cpf}`
+        );
+      }
+    } catch (migrationError) {
+      console.error(
+        `❌ [CLIENTE] Erro ao migrar pontos pendentes para usuário ${userId}:`,
+        migrationError
+      );
+      // Não falhar a criação do cliente se a migração falhar
     }
 
     if (isNewUser) {

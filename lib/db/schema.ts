@@ -166,6 +166,47 @@ export const pending_points = pgTable("pending_points", {
   metadata: json("metadata"),
 });
 
+export const pendingNFCe = pgTable("pending_nfce", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  storeId: uuid("store_id")
+    .notNull()
+    .references(() => stores.id, { onDelete: "cascade" }),
+  chaveAcesso: text("chave_acesso").notNull().unique(),
+  estado: text("estado").notNull(),
+  sefazUrl: text("sefaz_url").notNull(),
+  status: text("status", { enum: ["pending", "approved", "rejected"] })
+    .notNull()
+    .default("pending"),
+  valorTotal: numeric("valor_total", { precision: 10, scale: 2 }),
+  dataEmissao: timestamp("data_emissao"),
+  estabelecimento: text("estabelecimento"),
+  cnpj: text("cnpj"),
+  pontosAtribuidos: integer("pontos_atribuidos"),
+  observacoes: text("observacoes"),
+  validadoPor: uuid("validado_por").references(() => users.id),
+  validadoEm: timestamp("validado_em"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const nfceValidationLog = pgTable("nfce_validation_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  nfceId: uuid("nfce_id")
+    .notNull()
+    .references(() => pendingNFCe.id, { onDelete: "cascade" }),
+  action: text("action", {
+    enum: ["created", "approved", "rejected", "updated"],
+  }).notNull(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  details: text("details"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 /* ================================
    REWARDS TABLES
 ================================= */
@@ -440,6 +481,36 @@ export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
     references: [stores.id],
   }),
 }));
+
+export const pendingNFCeRelations = relations(pendingNFCe, ({ one, many }) => ({
+  user: one(users, {
+    fields: [pendingNFCe.userId],
+    references: [users.id],
+  }),
+  store: one(stores, {
+    fields: [pendingNFCe.storeId],
+    references: [stores.id],
+  }),
+  validator: one(users, {
+    fields: [pendingNFCe.validadoPor],
+    references: [users.id],
+  }),
+  validationLogs: many(nfceValidationLog),
+}));
+
+export const nfceValidationLogRelations = relations(
+  nfceValidationLog,
+  ({ one }) => ({
+    nfce: one(pendingNFCe, {
+      fields: [nfceValidationLog.nfceId],
+      references: [pendingNFCe.id],
+    }),
+    user: one(users, {
+      fields: [nfceValidationLog.userId],
+      references: [users.id],
+    }),
+  })
+);
 
 /* ================================
    TYPES

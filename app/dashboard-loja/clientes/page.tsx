@@ -27,9 +27,13 @@ import { useStoreConfig } from "@/hooks/queries/use-store-config";
 import { getPlanById } from "@/lib/plans";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { migratePendingPoints } from "@/actions/clients";
+import {
+  migratePendingPoints,
+  migratePointsForExistingUser,
+} from "@/actions/clients";
 import { useToast } from "@/hooks/use-toast";
 import { ClientesSkeleton } from "@/components/ui/dashboard-skeleton";
+import { useMigratePointsForExistingUser } from "@/hooks/mutations/use-migrate-points-for-existing-user";
 
 export default function ClientesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,15 +62,28 @@ export default function ClientesPage() {
     setCurrentPage(page);
   };
 
+  const migratePointsMutation = useMigratePointsForExistingUser();
+
   const handleMigratePoints = async (cpf: string) => {
     if (!storeConfig?.storeId) return;
 
     setMigratingPoints(cpf);
     try {
-      toast({
-        title: "Migração de Pontos",
-        description: `Pontos pendentes para CPF ${cpf} serão migrados quando o cliente se cadastrar na plataforma.`,
-      });
+      const result = await migratePointsForExistingUser({ cpf });
+
+      if (result.success && result.pointsMigrated > 0) {
+        toast({
+          title: "Pontos migrados com sucesso!",
+          description: `${result.pointsMigrated} pontos foram migrados de ${
+            result.storesMigrated
+          } lojas para ${result.userInfo?.name || "o usuário"}.`,
+        });
+      } else {
+        toast({
+          title: "Nenhum ponto migrado",
+          description: result.message,
+        });
+      }
     } catch (error) {
       toast({
         title: "Erro",
@@ -364,14 +381,19 @@ export default function ClientesPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleMigratePoints(cliente.cpf!)}
-                              disabled={migratingPoints === cliente.cpf}
+                              disabled={
+                                migratingPoints === cliente.cpf ||
+                                migratePointsMutation.isPending
+                              }
                               className="text-orange-600 hover:text-orange-700"
                             >
-                              {migratingPoints === cliente.cpf ? (
-                                <RefreshCw className="h-4 w-4 animate-spin" />
+                              {migratingPoints === cliente.cpf ||
+                              migratePointsMutation.isPending ? (
+                                <RefreshCw className="h-4 w-4 animate-spin mr-1" />
                               ) : (
-                                <RefreshCw className="h-4 w-4" />
+                                <RefreshCw className="h-4 w-4 mr-1" />
                               )}
+                              Migrar Pontos
                             </Button>
                           )}
                         </div>

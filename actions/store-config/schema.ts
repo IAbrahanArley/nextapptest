@@ -9,7 +9,7 @@ export const storeConfigSchema = z.object({
   cnpj: z
     .string()
     .regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/, "CNPJ inválido")
-    .optional(),
+    .min(1, "CNPJ é obrigatório para receber notas fiscais"),
   email: z.string().email("E-mail inválido").optional(),
   phone: z.string().optional(),
   address: z.string().optional(),
@@ -32,4 +32,3 @@ export const storeConfigSchema = z.object({
 });
 
 export type StoreConfigFormData = z.infer<typeof storeConfigSchema>;
-

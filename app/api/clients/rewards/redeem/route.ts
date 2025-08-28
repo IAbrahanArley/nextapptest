@@ -57,17 +57,34 @@ export async function POST(req: Request) {
       );
     }
 
-    const [userBalance] = await db
-      .select()
-      .from(user_store_balances)
+    // Calcular pontos do usuário baseado nas transações
+    const userTransactions = await db
+      .select({
+        type: point_transactions.type,
+        amount: point_transactions.amount,
+      })
+      .from(point_transactions)
       .where(
         and(
-          eq(user_store_balances.user_id, session.user.id),
-          eq(user_store_balances.store_id, storeId)
+          eq(point_transactions.user_id, session.user.id),
+          eq(point_transactions.store_id, storeId)
         )
       );
 
-    if (!userBalance || userBalance.points < reward.cost_points) {
+    // Calcular saldo atual
+    let currentPoints = 0;
+    userTransactions.forEach((transaction) => {
+      if (transaction.type === "award" || transaction.type === "adjustment") {
+        currentPoints += transaction.amount;
+      } else if (
+        transaction.type === "redeem" ||
+        transaction.type === "expire"
+      ) {
+        currentPoints -= transaction.amount;
+      }
+    });
+
+    if (currentPoints < reward.cost_points) {
       return NextResponse.json(
         { error: "Pontos insuficientes para resgatar este prêmio" },
         { status: 400 }
@@ -75,17 +92,40 @@ export async function POST(req: Request) {
     }
 
     await db.transaction(async (tx) => {
-      await tx
-        .update(user_store_balances)
-        .set({
-          points: userBalance.points - reward.cost_points,
-        })
+      // Atualizar user_store_balances para manter consistência
+      const [existingBalance] = await tx
+        .select()
+        .from(user_store_balances)
         .where(
           and(
             eq(user_store_balances.user_id, session.user.id),
             eq(user_store_balances.store_id, storeId)
           )
-        );
+        )
+        .limit(1);
+
+      if (existingBalance) {
+        await tx
+          .update(user_store_balances)
+          .set({
+            points: existingBalance.points - reward.cost_points,
+            updated_at: new Date(),
+          })
+          .where(
+            and(
+              eq(user_store_balances.user_id, session.user.id),
+              eq(user_store_balances.store_id, storeId)
+            )
+          );
+      } else {
+        // Se não existir, criar com saldo negativo (deve ser raro)
+        await tx.insert(user_store_balances).values({
+          user_id: session.user.id,
+          store_id: storeId,
+          points: -reward.cost_points,
+          reserved_points: 0,
+        });
+      }
 
       await tx.insert(point_transactions).values({
         user_id: session.user.id,
@@ -125,11 +165,8 @@ export async function POST(req: Request) {
         timestamp: Date.now(),
       };
 
-      const qrCodeString = await QRCode.toString(JSON.stringify(qrCodeData), {
-        type: "svg",
-        width: 200,
-        margin: 2,
-      });
+      // Salvar apenas os dados do QR code, não o SVG completo
+      const qrCodeDataString = JSON.stringify(qrCodeData);
 
       const expiresAt = new Date();
       expiresAt.setDate(
@@ -149,7 +186,7 @@ export async function POST(req: Request) {
 
       await tx.insert(reward_redemption_qr_codes).values({
         redemption_id: redemption.id,
-        qr_code: qrCodeString,
+        qr_code: qrCodeDataString,
         verification_code: verificationCode,
         expires_at: expiresAt,
       });
@@ -157,7 +194,6 @@ export async function POST(req: Request) {
       await tx
         .update(reward_redemptions)
         .set({
-          qr_code: qrCodeString,
           redeemed_at: new Date(),
         })
         .where(eq(reward_redemptions.id, redemption.id));
@@ -179,7 +215,7 @@ export async function POST(req: Request) {
         id: reward.id,
         name: reward.title,
         points_used: reward.cost_points,
-        remaining_points: userBalance.points - reward.cost_points,
+        remaining_points: currentPoints - reward.cost_points,
       },
     });
   } catch (error) {

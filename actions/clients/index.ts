@@ -4,3 +4,4 @@ export { getClient } from "./get-client";
 export { updateClient } from "./update-client";
 export { deleteClient } from "./delete-client";
 export { migratePendingPoints } from "./migrate-pending-points";
+export { migratePointsForExistingUser } from "./migrate-points-for-existing-user";

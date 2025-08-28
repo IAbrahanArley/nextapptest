@@ -13,7 +13,7 @@ export function generateVerificationCode(
   const hashPart = hash.substring(0, 8).toUpperCase();
 
   // Criar um código alfanumérico de 12 caracteres
-  // Formato: LOJA-HASH (ex: LOJA-A1B2C3D4)
+  // Formato: LOJAHASH (ex: LOJAA1B2C3D4)
   const storePrefix = storeName
     .substring(0, 4)
     .toUpperCase()
@@ -22,12 +22,12 @@ export function generateVerificationCode(
   // Garantir que o prefixo tenha exatamente 4 caracteres
   const paddedPrefix = storePrefix.padEnd(4, "A");
 
-  return `${paddedPrefix}-${hashPart}`;
+  return `${paddedPrefix}${hashPart}`;
 }
 
 export function validateVerificationCode(code: string): boolean {
-  // Validar formato: XXXX-XXXXXXXX (4 letras + hífen + 8 caracteres alfanuméricos)
-  const codeRegex = /^[A-Z]{4}-[A-Z0-9]{8}$/;
+  // Validar formato: XXXXXXXXXXXX (12 caracteres alfanuméricos)
+  const codeRegex = /^[A-Z0-9]{12}$/;
   return codeRegex.test(code);
 }
 

@@ -79,12 +79,17 @@ export function StoreConfigForm({
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="cnpj">CNPJ</Label>
+              <Label htmlFor="cnpj">CNPJ *</Label>
               <Input
                 id="cnpj"
                 {...form.register("cnpj")}
                 placeholder="00.000.000/0000-00"
+                required
               />
+              <p className="text-xs text-muted-foreground">
+                O CNPJ é obrigatório para receber notas fiscais eletrônicas e
+                atribuir pontos automaticamente.
+              </p>
               {form.formState.errors.cnpj && (
                 <p className="text-sm text-red-500">
                   {form.formState.errors.cnpj.message}
@@ -372,7 +377,3 @@ export function StoreConfigForm({
     </form>
   );
 }
-
-
-
-
