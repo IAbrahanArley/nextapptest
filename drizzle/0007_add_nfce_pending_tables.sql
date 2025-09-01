@@ -40,3 +40,6 @@ CREATE INDEX IF NOT EXISTS "pending_nfce_chave_acesso_idx" ON "pending_nfce"("ch
 CREATE INDEX IF NOT EXISTS "nfce_validation_log_nfce_id_idx" ON "nfce_validation_log"("nfce_id");
 
 
+
+
+

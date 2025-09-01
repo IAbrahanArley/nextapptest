@@ -71,33 +71,83 @@ export default function ConfiguracoesPage() {
   // Handle image upload
   const handleImageUpload = async (file: File) => {
     try {
+      console.log("🔄 Iniciando upload de imagem...");
+      console.log("📁 Arquivo:", file.name, file.size, file.type);
+      console.log("🏪 StoreId:", storeId);
+      console.log("🏪 Nome da Loja:", storeData?.name);
+
       const formData = new FormData();
       formData.append("image", file);
       formData.append("storeId", storeId);
+      formData.append("storeName", storeData?.name || "loja-sem-nome");
 
-      const response = await fetch("/api/stores/upload-profile-image", {
+      console.log("📤 Enviando para API...");
+      const response = await fetch("/api/upload/test-upload", {
+        // Temporariamente usando endpoint de teste
         method: "POST",
         body: formData,
       });
 
+      console.log(
+        "📥 Resposta recebida:",
+        response.status,
+        response.statusText
+      );
+
       if (!response.ok) {
-        throw new Error("Erro ao fazer upload da imagem");
+        let errorMessage = `Erro HTTP: ${response.status}`;
+        let errorDetails = "";
+
+        try {
+          const errorData = await response.json();
+          console.error("❌ Erro na resposta:", errorData);
+
+          if (errorData.error) {
+            errorMessage = errorData.error;
+          }
+          if (errorData.details) {
+            errorDetails = errorData.details;
+          }
+        } catch (parseError) {
+          console.error("❌ Erro ao fazer parse da resposta:", parseError);
+        }
+
+        throw new Error(
+          errorMessage + (errorDetails ? ` - ${errorDetails}` : "")
+        );
       }
 
       const result = await response.json();
+      console.log("✅ Resultado:", result);
+
       if (result.success) {
         // Atualizar o estado local
         setStoreData((prev: StoreData | null) =>
           prev
             ? {
                 ...prev,
-                profileImageUrl: result.data.imageUrl,
+                profileImageUrl: result.url,
               }
             : null
         );
+
+        toast({
+          title: "Sucesso",
+          description: "Imagem de perfil atualizada com sucesso!",
+        });
+      } else {
+        throw new Error(result.error || "Erro desconhecido no upload");
       }
     } catch (error) {
-      console.error("Erro ao fazer upload:", error);
+      console.error("❌ Erro ao fazer upload:", error);
+      toast({
+        title: "Erro no Upload",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Erro ao fazer upload da imagem",
+        variant: "destructive",
+      });
       throw error;
     }
   };

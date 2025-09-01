@@ -1,5 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Gift, BarChart3, Users, Smartphone, Zap, Target } from "lucide-react";
+import {
+  Gift,
+  BarChart3,
+  Users,
+  Smartphone,
+  Zap,
+  Target,
+  Shield,
+  Settings,
+  CreditCard,
+  TrendingUp,
+  ArrowRight,
+} from "lucide-react";
 import growthChart from "@/assets/growth-chart.jpg";
 import metricsDashboard from "@/assets/metrics-dashboard.jpg";
 import Image from "next/image";
@@ -7,41 +19,40 @@ import Image from "next/image";
 const Features = () => {
   const features = [
     {
+      icon: Shield,
+      title: "Controle Total",
+      description:
+        "Sua loja tem autonomia completa para configurar regras, valores e condições de pontuação",
+    },
+    {
+      icon: CreditCard,
+      title: "Pontos por Nota Fiscal",
+      description:
+        "Sistema simples que coleta pontos automaticamente baseado no valor da compra",
+    },
+    {
+      icon: Settings,
+      title: "Configuração Flexível",
+      description:
+        "Defina quantos pontos por real, validade dos pontos e regras de resgate",
+    },
+    {
       icon: Gift,
-      title: "Programa de Pontos",
+      title: "Prêmios Personalizados",
       description:
-        "Sistema flexível de recompensas que mantém seus clientes engajados",
-    },
-    {
-      icon: BarChart3,
-      title: "Analytics Avançado",
-      description: "Dashboards em tempo real para acompanhar performance e ROI",
-    },
-    {
-      icon: Users,
-      title: "Segmentação Inteligente",
-      description:
-        "IA que identifica padrões e personaliza ofertas automaticamente",
-    },
-
-    {
-      icon: Smartphone,
-      title: "Sistema de pontos",
-      description:
-        "Escolha como seus clientes ganham e resgatam pontos, com opções de descontos e prêmios",
+        "Crie recompensas exclusivas que fazem sentido para seu negócio e clientes",
     },
     {
       icon: Zap,
-      title: "Simplicidade de Uso",
+      title: "Setup em 5 Minutos",
       description:
-        "Interface intuitiva que facilita a gestão do programa de fidelidade",
+        "Interface intuitiva que permite configurar todo o sistema rapidamente",
     },
-
     {
-      icon: Target,
-      title: "Campanhas Personalizadas",
+      icon: TrendingUp,
+      title: "Resultados Visíveis",
       description:
-        "Crie campanhas segmentadas para aumentar o engajamento e as vendas",
+        "Acompanhe o crescimento da fidelização e o retorno sobre investimento em tempo real",
     },
   ];
 
@@ -50,15 +61,15 @@ const Features = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            Recursos que
+            Simplicidade e
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               {" "}
-              Geram Resultados
+              Autonomia Total
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Tudo que você precisa para criar um programa de fidelidade que
-            realmente funciona
+            Um sistema feito para lojistas que querem controle total sobre seu
+            programa de fidelidade, sem complicações desnecessárias
           </p>
         </div>
 
@@ -84,25 +95,46 @@ const Features = () => {
           </div>
 
           <div className="space-y-8 w-full px-8">
-            <Image
-              src="/image1.png"
-              alt="Gráfico de Crescimento"
-              className="w-full h-2/5 rounded-2xl shadow-hero object-cover"
-              width={200}
-              height={100}
-            />
-            <Image
-              src="/image2.png"
-              alt="Dashboard de Métricas"
-              className="w-full h-2/5 rounded-2xl shadow-hero"
-              width={200}
-              height={100}
-            />
+            <div className="relative">
+              <Image
+                src="/image1.png"
+                alt="Dashboard de Controle"
+                className="w-full h-2/5 rounded-2xl shadow-hero object-cover"
+                width={200}
+                height={100}
+              />
+            </div>
+            <div className="relative">
+              <Image
+                src="/image2.png"
+                alt="Configuração Simples"
+                className="w-full h-2/5 rounded-2xl shadow-hero"
+                width={200}
+                height={100}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="text-center">
-          <Button size="lg">Teste Todos os Recursos Grátis</Button>
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">
+            <span className="font-semibold text-white">
+              Sem contratos longos
+            </span>{" "}
+            •
+            <span className="font-semibold text-white">
+              {" "}
+              Sem mensalidades ocultas
+            </span>{" "}
+            •
+            <span className="font-semibold text-white">
+              {" "}
+              Cancele quando quiser
+            </span>
+          </p>
+          <Button size="lg" className="group">
+            Teste por 14 dias
+          </Button>
         </div>
       </div>
     </section>

@@ -155,6 +155,7 @@ export const authOptions = {
   pages: {
     signIn: "/login",
     signUp: "/cadastro",
+    error: "/login",
   },
   session: {
     strategy: "jwt" as const,
@@ -163,7 +164,7 @@ export const authOptions = {
   jwt: {
     maxAge: 30 * 24 * 60 * 60, // 30 dias
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-key-for-development",
   debug: process.env.NODE_ENV === "development",
 };
 

@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Calculator, TrendingUp, DollarSign } from "lucide-react";
+import {
+  Calculator,
+  TrendingUp,
+  DollarSign,
+  Shield,
+  Zap,
+  Target,
+} from "lucide-react";
 import Image from "next/image";
 
 const ROI = () => {
@@ -10,61 +17,77 @@ const ROI = () => {
           <div className="space-y-8">
             <div>
               <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-                Aumente o
+                Autonomia que
                 <span className="bg-gradient-secondary bg-clip-text text-transparent">
                   {" "}
-                  ROI{" "}
+                  Gera Resultados{" "}
                 </span>
-                do Seu Negócio
               </h2>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Veja quanto sua empresa pode economizar e ganhar com nossa
-                plataforma de fidelidade
+                Sua loja tem controle total sobre o sistema de pontos,
+                permitindo criar estratégias personalizadas que realmente
+                funcionam para seu negócio
               </p>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-start space-x-4 p-6 bg-gradient-subtle rounded-xl">
                 <div className="w-12 h-12 bg-gradient-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 text-secondary-foreground" />
+                  <Shield className="w-6 h-6 text-secondary-foreground" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Aumento de 85% na Retenção
+                    Controle Total da Loja
                   </h3>
                   <p className="text-muted-foreground">
-                    Clientes fiéis compram 67% mais frequentemente e gastam 300%
-                    mais ao longo do tempo
+                    Configure regras de pontuação, validade dos pontos e
+                    condições de resgate exatamente como sua loja precisa
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4 p-6 bg-gradient-subtle rounded-xl">
                 <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                  <DollarSign className="w-6 h-6 text-primary-foreground" />
+                  <Target className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    ROI de 300% em 6 meses
+                    Pontos por Nota Fiscal
                   </h3>
                   <p className="text-muted-foreground">
-                    Para cada R$ 1 investido, nossos clientes recuperam R$ 3 em
-                    receita adicional
+                    Sistema automático que coleta pontos baseado no valor da
+                    compra, sem complicações ou configurações complexas
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4 p-6 bg-gradient-subtle rounded-xl">
                 <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Calculator className="w-6 h-6 text-primary-foreground" />
+                  <Zap className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    Redução de 40% no CAC
+                    Setup em 5 Minutos
                   </h3>
                   <p className="text-muted-foreground">
-                    Indicações de clientes satisfeitos reduzem drasticamente o
-                    custo de aquisição
+                    Interface intuitiva que permite configurar todo o sistema
+                    rapidamente, sem necessidade de treinamentos ou suporte
+                    técnico
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4 p-6 bg-gradient-subtle rounded-xl">
+                <div className="w-12 h-12 bg-gradient-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-6 h-6 text-secondary-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">
+                    ROI de 300% em 6 Meses
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Para cada R$ 1 investido, nossas lojas recuperam R$ 3 em
+                    receita adicional, com controle total sobre a estratégia
                   </p>
                 </div>
               </div>
@@ -74,7 +97,7 @@ const ROI = () => {
           <div className="relative">
             <Image
               src="/grafico1.png"
-              alt="Gráfico de ROI"
+              alt="Dashboard de Controle"
               className="w-full rounded-2xl shadow-hero"
               width={600}
               height={400}

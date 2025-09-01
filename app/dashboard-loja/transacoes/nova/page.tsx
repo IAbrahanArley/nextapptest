@@ -28,6 +28,7 @@ import { useStoreConfig } from "@/hooks/queries/use-store-config";
 import { useCreateTransaction } from "@/hooks/mutations/use-create-transaction";
 import { useToast } from "@/hooks/use-toast";
 import { NumericFormat } from "react-number-format";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function NovaTransacaoPage() {
   const router = useRouter();
@@ -134,8 +135,8 @@ export default function NovaTransacaoPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Nova Transação</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold">Nova Transação</h1>
+            <p className="text-muted-foreground">
               Registre uma nova venda e gere pontos automaticamente
             </p>
           </div>
@@ -153,8 +154,8 @@ export default function NovaTransacaoPage() {
                 <div className="space-y-6">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="space-y-2">
-                      <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
-                      <div className="h-10 w-full bg-gray-200 rounded animate-pulse" />
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-10 w-full" />
                     </div>
                   ))}
                 </div>
@@ -176,8 +177,8 @@ export default function NovaTransacaoPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Nova Transação</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold">Nova Transação</h1>
+          <p className="text-muted-foreground">
             Registre uma nova venda e gere pontos automaticamente
           </p>
         </div>
@@ -352,30 +353,30 @@ export default function NovaTransacaoPage() {
                 <div className="text-sm text-muted-foreground mb-1">
                   Valor da Compra
                 </div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold">
                   {formatCurrency(valor)}
                 </div>
               </div>
 
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <div className="text-sm text-blue-600 mb-1">
+              <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                <div className="text-sm text-blue-600 dark:text-blue-400 mb-1">
                   Taxa de Conversão
                 </div>
-                <div className="text-lg font-bold text-blue-600">
+                <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                   {storeConfig?.pointsPerCurrency || 1} ponto por R$ 1,00
                 </div>
               </div>
 
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <div className="text-sm text-purple-600 mb-1">
+              <div className="p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
+                <div className="text-sm text-purple-600 dark:text-purple-400 mb-1">
                   Pontos a Conceder
                 </div>
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {pontosCalculados} pontos
                 </div>
               </div>
 
-              <div className="text-xs text-gray-500 mt-4">
+              <div className="text-xs text-muted-foreground mt-4">
                 * Os pontos serão creditados automaticamente na conta do cliente
                 após a confirmação da transação.
                 {useCpf && (

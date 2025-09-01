@@ -28,6 +28,83 @@ export function ClientForm({ onSubmit, isLoading }: ClientFormProps) {
     },
   });
 
+  const formatPhone = (value: string) => {
+    const numbers = value.replace(/\D/g, "");
+    if (numbers.length <= 2) return numbers;
+    if (numbers.length <= 7)
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    if (numbers.length <= 11)
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(
+        7
+      )}`;
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(
+      7,
+      11
+    )}`;
+  };
+
+  const formatCpf = (value: string) => {
+    const numbers = value.replace(/\D/g, "");
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6)
+      return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+    if (numbers.length <= 9)
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(
+        6
+      )}`;
+    if (numbers.length <= 11)
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(
+        6,
+        9
+      )}-${numbers.slice(9)}`;
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(
+      6,
+      9
+    )}-${numbers.slice(9, 11)}`;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhone(e.target.value);
+    form.setValue("phone", formatted);
+
+    // Validação em tempo real
+    const numbers = formatted.replace(/\D/g, "");
+    if (numbers.length < 10) {
+      form.setError("phone", {
+        type: "manual",
+        message: "Telefone deve ter pelo menos 10 dígitos",
+      });
+    } else if (numbers.length > 11) {
+      form.setError("phone", {
+        type: "manual",
+        message: "Telefone deve ter no máximo 11 dígitos",
+      });
+    } else {
+      form.clearErrors("phone");
+    }
+  };
+
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCpf(e.target.value);
+    form.setValue("cpf", formatted);
+
+    // Validação em tempo real
+    const numbers = formatted.replace(/\D/g, "");
+    if (numbers.length < 11) {
+      form.setError("cpf", {
+        type: "manual",
+        message: "CPF deve ter pelo menos 11 dígitos",
+      });
+    } else if (numbers.length > 11) {
+      form.setError("cpf", {
+        type: "manual",
+        message: "CPF deve ter exatamente 11 dígitos",
+      });
+    } else {
+      form.clearErrors("cpf");
+    }
+  };
+
   const handleSubmit = form.handleSubmit(onSubmit);
 
   return (
@@ -55,6 +132,7 @@ export function ClientForm({ onSubmit, isLoading }: ClientFormProps) {
             {...form.register("phone")}
             placeholder="(11) 99999-9999"
             className={form.formState.errors.phone ? "border-red-500" : ""}
+            onChange={handlePhoneChange}
           />
           {form.formState.errors.phone && (
             <p className="text-sm text-red-500">
@@ -86,6 +164,7 @@ export function ClientForm({ onSubmit, isLoading }: ClientFormProps) {
             {...form.register("cpf")}
             placeholder="000.000.000-00"
             className={form.formState.errors.cpf ? "border-red-500" : ""}
+            onChange={handleCpfChange}
           />
           {form.formState.errors.cpf && (
             <p className="text-sm text-red-500">
@@ -109,12 +188,3 @@ export function ClientForm({ onSubmit, isLoading }: ClientFormProps) {
     </form>
   );
 }
-
-
-
-
-
-
-
-
-

@@ -47,8 +47,8 @@ export default function NovoClientePage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Novo Cliente</h1>
-            <p className="text-gray-600">Carregando...</p>
+            <h1 className="text-3xl font-bold">Novo Cliente</h1>
+            <p className="text-muted-foreground">Carregando...</p>
           </div>
         </div>
       </div>
@@ -66,8 +66,8 @@ export default function NovoClientePage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Novo Cliente</h1>
-            <p className="text-gray-600">Erro: Loja não encontrada</p>
+            <h1 className="text-3xl font-bold">Novo Cliente</h1>
+            <p className="text-muted-foreground">Erro: Loja não encontrada</p>
           </div>
         </div>
       </div>
@@ -83,14 +83,14 @@ export default function NovoClientePage() {
           toast({
             title: "Cliente criado com sucesso! 🎉",
             description:
-              result.data.message ||
+              result.data?.message ||
               "Cliente criado com sucesso! Senha temporária enviada por email.",
           });
         } else {
           toast({
             title: "Cliente atualizado! ✏️",
             description:
-              result.data.message || "Cliente atualizado com sucesso",
+              result.data?.message || "Cliente atualizado com sucesso",
           });
         }
         router.push("/dashboard-loja/clientes");
@@ -130,8 +130,10 @@ export default function NovoClientePage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Novo Cliente</h1>
-          <p className="text-gray-600">Cadastre um novo cliente no sistema</p>
+          <h1 className="text-3xl font-bold">Novo Cliente</h1>
+          <p className="text-muted-foreground">
+            Cadastre um novo cliente no sistema
+          </p>
         </div>
       </div>
 

@@ -1,213 +1,190 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { BarChart3, Download, Calendar, TrendingUp, Users, CreditCard } from "lucide-react"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts"
-import { getSubscription } from "@/lib/subscription"
-import { getPlanById } from "@/lib/plans"
-
-// Dados simulados para relatórios
-const vendasPorMes = [
-  { mes: "Jan", vendas: 12500, clientes: 45, transacoes: 156 },
-  { mes: "Fev", vendas: 15200, clientes: 52, transacoes: 189 },
-  { mes: "Mar", vendas: 18900, clientes: 61, transacoes: 234 },
-  { mes: "Abr", vendas: 16800, clientes: 58, transacoes: 201 },
-  { mes: "Mai", vendas: 21300, clientes: 67, transacoes: 267 },
-  { mes: "Jun", vendas: 19500, clientes: 63, transacoes: 245 },
-]
-
-const clientesPorCategoria = [
-  { categoria: "Novos", valor: 35, cor: "#3b82f6" },
-  { categoria: "Recorrentes", valor: 45, cor: "#10b981" },
-  { categoria: "VIP", valor: 20, cor: "#f59e0b" },
-]
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Lock,
+  Sparkles,
+  BarChart3,
+  Calendar,
+  TrendingUp,
+  Users,
+  CreditCard,
+  Brain,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function RelatoriosPage() {
-  const subscription = getSubscription("1")
-  const currentPlan = getPlanById(subscription?.planId || "basic")
-
-  const hasAdvancedReports = currentPlan?.limits.relatoriosAvancados || false
-
-  if (!hasAdvancedReports) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Relatórios</h1>
-          <p className="text-gray-600">Análises detalhadas do seu programa de fidelidade</p>
-        </div>
-
-        <Card className="text-center py-12">
-          <CardContent>
-            <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Relatórios Avançados</h3>
-            <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Faça upgrade para o plano Profissional ou Premium para acessar relatórios detalhados e análises avançadas
-              do seu programa de fidelidade.
-            </p>
-            <div className="space-x-4">
-              <Button>Fazer Upgrade</Button>
-              <Button variant="outline" className="bg-transparent">
-                Ver Planos
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Relatórios</h1>
-          <p className="text-gray-600">Análises detalhadas do seu programa de fidelidade</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="bg-transparent">
-            <Calendar className="h-4 w-4 mr-2" />
-            Período
-          </Button>
-          <Button>
-            <Download className="h-4 w-4 mr-2" />
-            Exportar
-          </Button>
-        </div>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">Relatórios Inteligentes</h1>
+        <p className="text-muted-foreground mt-2">
+          Análises avançadas e insights baseados em IA para seu programa de
+          fidelidade
+        </p>
       </div>
 
-      {/* Métricas Principais */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">R$ 104.200</div>
-            <p className="text-xs text-muted-foreground">+12% vs mês anterior</p>
-          </CardContent>
-        </Card>
+      {/* Card Principal com Cadeado */}
+      <Card className="text-center py-16 max-w-4xl mx-auto">
+        <CardContent className="space-y-6">
+          {/* Ícone do Cadeado */}
+          <div className="relative inline-block">
+            <Lock className="h-24 w-24 text-muted-foreground mx-auto mb-4" />
+            <div className="absolute -top-2 -right-2">
+              <Sparkles className="h-8 w-8 text-yellow-500 animate-pulse" />
+            </div>
+          </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Clientes Ativos</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">351</div>
-            <p className="text-xs text-muted-foreground">+8% vs mês anterior</p>
-          </CardContent>
-        </Card>
+          {/* Título e Descrição */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">
+              Funcionalidade em Desenvolvimento
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+              Estamos trabalhando em relatórios inteligentes que usarão
+              inteligência artificial para fornecer insights valiosos sobre seu
+              programa de fidelidade.
+            </p>
+          </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Taxa de Retenção</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">78%</div>
-            <p className="text-xs text-muted-foreground">+5% vs mês anterior</p>
-          </CardContent>
-        </Card>
+          {/* Recursos Futuros */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div className="text-left space-y-3">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Brain className="h-5 w-5 text-blue-500" />
+                Análise Preditiva
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Previsões de comportamento do cliente e tendências de vendas
+                usando machine learning
+              </p>
+            </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ROI do Programa</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">245%</div>
-            <p className="text-xs text-muted-foreground">+15% vs mês anterior</p>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="text-left space-y-3">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-green-500" />
+                Insights Automáticos
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Descoberta automática de padrões e recomendações personalizadas
+                para otimização
+              </p>
+            </div>
 
-      {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Evolução de Vendas</CardTitle>
-            <CardDescription>Vendas mensais e número de clientes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={vendasPorMes}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="mes" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="vendas" fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+            <div className="text-left space-y-3">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Users className="h-5 w-5 text-purple-500" />
+                Segmentação Inteligente
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Agrupamento automático de clientes baseado em comportamento e
+                preferências
+              </p>
+            </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Distribuição de Clientes</CardTitle>
-            <CardDescription>Segmentação por tipo de cliente</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={clientesPorCategoria}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  dataKey="valor"
-                  label={({ categoria, valor }) => `${categoria}: ${valor}%`}
-                >
-                  {clientesPorCategoria.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.cor} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="text-left space-y-3">
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-orange-500" />
+                Relatórios Adaptativos
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Relatórios que se ajustam automaticamente aos dados e objetivos
+                do seu negócio
+              </p>
+            </div>
+          </div>
 
-      {/* Relatórios Detalhados */}
-      <Card>
+          {/* Call to Action */}
+          <div className="pt-6 border-t">
+            <p className="text-sm text-muted-foreground mb-4">
+              Quer ser notificado quando esta funcionalidade estiver disponível?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <Sparkles className="h-4 w-4 mr-2" />
+                Fila de Espera
+              </Button>
+              <Button variant="outline">
+                <Calendar className="h-4 w-4 mr-2" />
+                Roadmap
+              </Button>
+            </div>
+          </div>
+
+          {/* Informações Adicionais */}
+          <div className="mt-8 p-4 bg-muted/50 rounded-lg">
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <span>Desenvolvimento ativo com IA</span>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Card de Recursos Temporários */}
+      <Card className="max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle>Relatórios Disponíveis</CardTitle>
-          <CardDescription>Baixe relatórios detalhados em diferentes formatos</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            Recursos Temporários Disponíveis
+          </CardTitle>
+          <CardDescription>
+            Enquanto desenvolvemos os relatórios inteligentes, você pode usar
+            estas funcionalidades básicas
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">Relatório de Vendas</h4>
-              <p className="text-sm text-gray-600 mb-4">Análise completa das vendas por período</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Baixar PDF
-              </Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="border rounded-lg p-4 text-center">
+              <CreditCard className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+              <h4 className="font-semibold mb-1">Dashboard Básico</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Visão geral das métricas principais
+              </p>
+              <Link href="/dashboard-loja">
+                <Button size="sm" variant="outline" className="w-full">
+                  Acessar
+                </Button>
+              </Link>
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">Análise de Clientes</h4>
-              <p className="text-sm text-gray-600 mb-4">Comportamento e segmentação de clientes</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Baixar Excel
-              </Button>
+            <div className="border rounded-lg p-4 text-center">
+              <Users className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <h4 className="font-semibold mb-1">Lista de Clientes</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Gerenciamento de clientes cadastrados
+              </p>
+              <Link href="/dashboard-loja/clientes">
+                <Button size="sm" variant="outline" className="w-full">
+                  Acessar
+                </Button>
+              </Link>
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold mb-2">ROI do Programa</h4>
-              <p className="text-sm text-gray-600 mb-4">Retorno sobre investimento detalhado</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Baixar PDF
-              </Button>
+            <div className="border rounded-lg p-4 text-center">
+              <TrendingUp className="h-8 w-8 text-purple-500 mx-auto mb-2" />
+              <h4 className="font-semibold mb-1">Transações</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Histórico de transações e pontos
+              </p>
+              <Link href="/dashboard-loja/transacoes">
+                <Button size="sm" variant="outline" className="w-full">
+                  Acessar
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

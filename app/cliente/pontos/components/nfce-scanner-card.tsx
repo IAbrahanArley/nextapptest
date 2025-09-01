@@ -53,3 +53,6 @@ export function NFCeScannerCard({ onOpenScanner }: NFCeScannerCardProps) {
 }
 
 
+
+
+

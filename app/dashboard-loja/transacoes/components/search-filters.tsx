@@ -29,55 +29,44 @@ export function SearchFilters({
   onSearch,
 }: SearchFiltersProps) {
   return (
-    <Card className="shadow-sm dark:bg-gray-800 dark:border-gray-700 mb-6">
+    <Card className="shadow-sm mb-6">
       <CardHeader>
-        <CardTitle className="text-gray-900 dark:text-gray-100">
-          Filtros
-        </CardTitle>
-        <CardDescription className="text-gray-600 dark:text-gray-400">
+        <CardTitle>Filtros</CardTitle>
+        <CardDescription>
           Filtre as transações por período e termo de busca
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Termo de Busca
-            </label>
+            <label className="text-sm font-medium">Termo de Busca</label>
             <Input
               placeholder="Nome, email ou CPF..."
               value={searchTerm}
               onChange={(e) => onSearchTermChange(e.target.value)}
-              className="mt-1 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:placeholder:text-gray-400"
+              className="mt-1"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Data Inicial
-            </label>
+            <label className="text-sm font-medium">Data Inicial</label>
             <Input
               type="date"
               value={startDate}
               onChange={(e) => onStartDateChange(e.target.value)}
-              className="mt-1 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+              className="mt-1"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Data Final
-            </label>
+            <label className="text-sm font-medium">Data Final</label>
             <Input
               type="date"
               value={endDate}
               onChange={(e) => onEndDateChange(e.target.value)}
-              className="mt-1 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+              className="mt-1"
             />
           </div>
           <div className="flex items-end">
-            <Button
-              onClick={onSearch}
-              className="w-full dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white hover:bg-blue-700"
-            >
+            <Button onClick={onSearch} className="w-full">
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>

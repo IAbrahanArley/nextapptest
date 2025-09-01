@@ -49,16 +49,10 @@ export function ProfileImageUpload({
     try {
       await onImageUpload(selectedImage);
       setSelectedImage(null);
-      toast({
-        title: "Sucesso",
-        description: "Imagem de perfil atualizada com sucesso!",
-      });
+      // Toast de sucesso será mostrado pela função onImageUpload
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao fazer upload da imagem",
-        variant: "destructive",
-      });
+      console.error("Erro no upload:", error);
+      // Toast de erro será mostrado pela função onImageUpload
     } finally {
       setIsUploading(false);
     }

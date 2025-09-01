@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { TransactionCard } from "./transaction-card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TransactionsListProps {
   transactions: any[];
@@ -23,32 +24,28 @@ export function TransactionsList({
 }: TransactionsListProps) {
   if (isLoading) {
     return (
-      <Card className="shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-gray-100">
-            Lista de Transações
-          </CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-400">
-            Carregando...
-          </CardDescription>
+          <CardTitle>Lista de Transações</CardTitle>
+          <CardDescription>Carregando...</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {[1, 2, 3, 4, 5].map((i) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 animate-pulse"
+                className="flex items-center justify-between p-4 rounded-lg border"
               >
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 bg-gray-200 dark:bg-gray-600 rounded-lg" />
+                  <Skeleton className="h-12 w-12 rounded-lg" />
                   <div>
-                    <div className="h-5 w-32 bg-gray-200 dark:bg-gray-600 rounded mb-1" />
-                    <div className="h-4 w-48 bg-gray-200 dark:bg-gray-600 rounded" />
+                    <Skeleton className="h-5 w-32 mb-1" />
+                    <Skeleton className="h-4 w-48" />
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="h-6 w-20 bg-gray-200 dark:bg-gray-600 rounded mb-1" />
-                  <div className="h-4 w-16 bg-gray-200 dark:bg-gray-600 rounded" />
+                  <Skeleton className="h-6 w-20 mb-1" />
+                  <Skeleton className="h-4 w-16" />
                 </div>
               </div>
             ))}

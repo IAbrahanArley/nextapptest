@@ -17,8 +17,8 @@ const Footer = () => {
               realmente funcionam. Transforme seus clientes em fãs da sua marca.
             </p>
             <div className="space-y-2 text-background/80">
-              <div>📧 contato@branlyclub.com</div>
-              <div>📞 (83) 99677-5365</div>
+              <div>📧 contato@branly.com.br</div>
+              <div>📞 (83) 98902-8095</div>
               <div>📍 João Pessoa, PB</div>
             </div>
           </div>

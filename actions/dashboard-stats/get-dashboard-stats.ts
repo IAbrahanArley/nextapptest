@@ -148,6 +148,11 @@ export async function getDashboardStats(input: { storeId: string }) {
           100
         : 0;
 
+    // Debug logs para verificar os dados
+    console.log("=== DEBUG ACTION DASHBOARD STATS ===");
+    console.log("Monthly data raw:", monthlyData);
+    console.log("Store ID:", storeId);
+
     return {
       totalClients: totalClientsCount,
       totalPointsDistributed: totalPoints,
@@ -163,7 +168,7 @@ export async function getDashboardStats(input: { storeId: string }) {
           : "N/A",
       })),
       monthlyData: monthlyData.map((item) => ({
-        name: item.month || "Jan",
+        month: item.month || "Jan",
         vendas: Number(item.transactions || 0),
         pontos: Number(item.points || 0),
       })),
@@ -173,10 +178,3 @@ export async function getDashboardStats(input: { storeId: string }) {
     throw new Error("Falha ao carregar estatísticas do dashboard");
   }
 }
-
-
-
-
-
-
-

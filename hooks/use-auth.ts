@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { UserRole, LoginCredentials } from "@/types/auth";
 import { useToast } from "@/hooks/use-toast";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 export function useAuth() {
   const { data: session, status } = useSession();
@@ -102,6 +102,37 @@ export function useAuth() {
       });
     }
   }, [router, toast]);
+
+  // Efeito para redirecionar quando a sessão for estabelecida
+  useEffect(() => {
+    console.log("=== DEBUG USE_EFFECT ===");
+    console.log("Status mudou para:", status);
+    console.log("Session mudou para:", session);
+
+    if (status === "authenticated" && session?.user) {
+      console.log("=== SESSÃO ESTABELECIDA ===");
+      console.log("User:", session.user);
+      console.log("Role:", session.user.role);
+
+      // Verificar se já está na rota correta
+      const currentPath = window.location.pathname;
+      const expectedPath =
+        session.user.role === "merchant" ? "/dashboard-loja" : "/cliente";
+
+      console.log("Rota atual:", currentPath);
+      console.log("Rota esperada:", expectedPath);
+
+      // Só redirecionar se não estiver na rota correta
+      if (!currentPath.startsWith(expectedPath)) {
+        console.log("Redirecionando para:", expectedPath);
+        setTimeout(() => {
+          router.push(expectedPath);
+        }, 100);
+      } else {
+        console.log("Usuário já está na rota correta, não redirecionando");
+      }
+    }
+  }, [status, session, router]);
 
   return {
     user: session?.user,

@@ -39,30 +39,28 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
 
   const getTransactionTypeColor = (type: string) => {
     return type === "redeem"
-      ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 border-red-200 dark:border-red-700"
-      : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border-green-200 dark:border-green-700";
+      ? "bg-red-100 text-red-800 border-red-200"
+      : "bg-green-100 text-green-800 border-green-200";
   };
 
   const getPointsColor = (tipo: string) => {
-    return tipo === "award"
-      ? "text-green-600 dark:text-green-400"
-      : "text-blue-600 dark:text-blue-400";
+    return tipo === "award" ? "text-green-600" : "text-blue-600";
   };
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 hover:shadow-sm">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-all duration-200 hover:shadow-sm">
       <div className="flex items-center gap-4 mb-4 lg:mb-0">
-        <div className="h-12 w-12 bg-muted dark:bg-gray-600 rounded-lg flex items-center justify-center">
-          <CreditCard className="h-6 w-6 text-primary dark:text-blue-400" />
+        <div className="h-12 w-12 bg-muted rounded-lg flex items-center justify-center">
+          <CreditCard className="h-6 w-6 text-primary" />
         </div>
         <div>
-          <p className="font-medium text-gray-900 dark:text-gray-100">
+          <p className="font-medium">
             {transaction.cliente || "Cliente não identificado"}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground">
             {transaction.referencia || "Sem referência"}
           </p>
-          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
             <span>{formatDate(transaction.data)}</span>
           </div>
         </div>
@@ -81,7 +79,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
           {Math.abs(transaction.pontos || 0).toLocaleString()} pts
         </p>
         {transaction.valor && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-muted-foreground">
             {formatCurrency(transaction.valor)}
           </p>
         )}

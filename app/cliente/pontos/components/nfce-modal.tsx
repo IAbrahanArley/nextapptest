@@ -32,3 +32,6 @@ export function NFCeModal({ isOpen, onClose, onScan }: NFCeModalProps) {
 }
 
 
+
+
+
