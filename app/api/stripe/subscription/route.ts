@@ -128,6 +128,16 @@ export async function GET() {
         trialEnd: stripeSubscription.trial_end
           ? new Date(stripeSubscription.trial_end * 1000)
           : null,
+        isTrialing: stripeSubscription.status === "trialing",
+        trialDaysRemaining: stripeSubscription.trial_end
+          ? Math.max(
+              0,
+              Math.ceil(
+                (stripeSubscription.trial_end * 1000 - Date.now()) /
+                  (1000 * 60 * 60 * 24)
+              )
+            )
+          : null,
       },
       customer: {
         email: customer.email,

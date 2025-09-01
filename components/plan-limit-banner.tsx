@@ -16,6 +16,44 @@ export function PlanLimitBanner() {
   const plan = getPlanById(subscription.planId);
   if (!plan) return null;
 
+  // Verificar se está em período de trial
+  const isTrialing = subscription.status === "trialing";
+  const trialDaysRemaining = subscription.trialEnd
+    ? Math.max(
+        0,
+        Math.ceil(
+          (subscription.trialEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+        )
+      )
+    : null;
+
+  // Mostrar banner de trial se estiver em período de teste
+  if (isTrialing && trialDaysRemaining !== null) {
+    return (
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Crown className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <AlertDescription className="text-blue-800 dark:text-blue-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <strong>Período de Teste Ativo!</strong> Você tem{" "}
+              {trialDaysRemaining} {trialDaysRemaining === 1 ? "dia" : "dias"}{" "}
+              restantes.
+            </div>
+            <Link href="/dashboard-loja/assinatura">
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900"
+              >
+                Assinar Agora
+              </Button>
+            </Link>
+          </div>
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   // Verificar se está próximo dos limites
   const clientesPercentage =
     plan.limits.clientes === -1

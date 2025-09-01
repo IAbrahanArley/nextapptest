@@ -76,6 +76,14 @@ export async function POST(req: Request) {
         userId,
         plan,
       },
+      subscription_data: {
+        trial_period_days: 14, // Período de teste de 14 dias
+        metadata: {
+          storeName,
+          userId,
+          plan,
+        },
+      },
       line_items: [
         {
           price: priceId,

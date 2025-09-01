@@ -101,6 +101,17 @@ export async function POST(req: Request) {
               updated_at: new Date(),
             },
           });
+
+        console.log("✅ Assinatura criada com sucesso:", {
+          subscriptionId: subscription.id,
+          status: subscription.status,
+          trialEnd: subscription.trial_end
+            ? new Date(subscription.trial_end * 1000)
+            : null,
+          isTrialing: subscription.status === "trialing",
+          storeId: store.id,
+          planId: planId,
+        });
       }
     }
 
